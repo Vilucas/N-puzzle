@@ -6,7 +6,7 @@
 #    By: viclucas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 12:52:09 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/19 15:24:05 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,33 +49,33 @@ def     init_state(size, board):
 
     data['board'] = tuple(board)
     data['moves'] = ((1, 0), (0, 1), (-1, 0), (0, -1))
-    data['size_of_map'] = size
+    data['size'] = size
     data['zero_pos'] = find_depart(board, size)
     return data
 
 def     get_input():
     li = []
-    print("Choose an Algorithm :")
-    print("1- A*")
-    print("2- Dijkstra's algorithm")
-    print("$> ", end = '')
-    li.append(int(input()))
-    print("Choose a Heuristic")
-    print("1- ")
-    print("2- ")
-    print("$> ", end = '')
-    li.append(int(input()))
+    try:
+        print("Choose an Algorithm :\n" + "1- A*\n" "2- Dijkstra's algorithm\n" + "$>", end = ' ')
+        li.append(int(input()))
+        if li[0] > 2 or li[0] < 0:
+            raise(True)
+        print("Choose a Heuristic :\n" + "1- \n" + "2- \n" + "$>", end = ' ')
+        li.append(int(input()))
+        if li[1] > 2 or li[1] < 0:
+            raise(True)
+    except:
+        print("Your input is not correct")
+        sys.exit()
     return li
 
 
 if __name__ == "__main__":
-    
-   # user_input = get_input()
+
+    #user_input = get_input()
     size = 5
-    solvability(size)
     tmp = make_puzzle(size, 1, 10000);
     board = init_list(tmp, size);
-    print(board)
     movements = init_state(size, board);
-    print(movements)
+    solvability(movements)
 #    algorithm(movements, user_input)
