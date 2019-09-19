@@ -6,7 +6,7 @@
 #    By: viclucas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/18 21:20:42 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/19 12:52:09 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,31 +15,8 @@ import argparse
 import heapq
 import numpy as np
 
-#from algorithm import algorithm 
+from solvability import solvability 
 from generator import make_goal, make_puzzle
-
-def     create_node(cost, parent_node, coord):
-    node = {}
-    node['g'] = cost
-    node['h'] = 5
-    node['f'] = node['g'] + node['h']
-    node['coord'] = coord
-    node['old_cord'] = None
-   # if parent_node['coord']:
-    #    node['old_cord'] = parent_node;
-    return node
-
-def     find_your_neighbours(movements, cost, parent_node)
-    node = []
-    while (limit_tester(movements) == True)
-        create_node(cost, parent_node, 
-
-def     algorithm(movements):
-    close_list = []
-
-    open_list = find_your_neighbours(movements)
-    print(open_list)
-#   close_list = ft_choosen_one(open_list)
 
 
 def     init_list(tmp, size):
@@ -67,25 +44,38 @@ def     find_depart(board, size):
                 break
     return data
 
-def     init_movements(size, board):
-    
+def     init_state(size, board):
     data = {}
 
-    data['up'] = (1, 0)
-    data['right'] = (0, 1)
-    data['down'] = (- 1, 0)
-    data['left'] = (0, - 1)
+    data['board'] = tuple(board)
+    data['moves'] = ((1, 0), (0, 1), (-1, 0), (0, -1))
     data['size_of_map'] = size
-    data['init'] = find_depart(board, size)
+    data['zero_pos'] = find_depart(board, size)
     return data
 
-if __name__ == "__main__":
-    general_data = {}
+def     get_input():
+    li = []
+    print("Choose an Algorithm :")
+    print("1- A*")
+    print("2- Dijkstra's algorithm")
+    print("$> ", end = '')
+    li.append(int(input()))
+    print("Choose a Heuristic")
+    print("1- ")
+    print("2- ")
+    print("$> ", end = '')
+    li.append(int(input()))
+    return li
 
+
+if __name__ == "__main__":
+    
+   # user_input = get_input()
     size = 5
+    solvability(size)
     tmp = make_puzzle(size, 1, 10000);
     board = init_list(tmp, size);
     print(board)
-    movements = init_movements(size, board);
+    movements = init_state(size, board);
     print(movements)
-    algorithm(movements)
+#    algorithm(movements, user_input)
