@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 15:34:11 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/19 15:51:00 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,22 +57,23 @@ def     init_state(board_arr):
 
 def     get_input():
     li = []
-    print("Choose an Algorithm :")
-    print("1- A*")
-    print("2- Dijkstra's algorithm")
-    print("$> ", end = '')
-    li.append(int(input()))
-    print("Choose a Heuristic")
-    print("1- ")
-    print("2- ")
-    print("$> ", end = '')
-    li.append(int(input()))
+    try:
+        print("Choose an Algorithm :\n" + "1- A*\n" "2- Dijkstra's algorithm\n" + "$>", end = ' ')
+        li.append(int(input()))
+        if li[0] > 2 or li[0] < 0:
+            raise(True)
+        print("Choose a Heuristic :\n" + "1- \n" + "2- \n" + "$>", end = ' ')
+        li.append(int(input()))
+        if li[1] > 2 or li[1] < 0:
+            raise(True)
+    except:
+        print("Your input is not correct")
+        sys.exit()
     return li
 
 
 if __name__ == "__main__":
-    
-   # user_input = get_input()
+    #user_input = get_input()
     parser = argparse.ArgumentParser()
     parser.add_argument("puzzle", type=str, help="must be a solvable puzzle and size >= 3")
     args = parser.parse_args()
@@ -80,5 +81,5 @@ if __name__ == "__main__":
     print(f)
     state = init_state(f)
     #solvability(state)
-    print (state["board"])
     a_star(state)
+    solvability(state)
