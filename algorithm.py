@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 12:53:21 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/19 15:43:11 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,11 @@
 # Initiate cost_so_far
 # state = a particular map configuration
 
+#from n_puzzle import init_state
+import numpy as np
 import queue
+import math
+
 
 # this can get more efficient if we are able to access the current number in the goal with math
 
@@ -46,6 +50,14 @@ def     valid_move(cur_state, move):
         return True
     return False
 
+def     init_neighbor(size, new_board):
+    state = {}
+    state['board'] = new_board
+    state['size'] = size
+    state['moves'] = ((1, 0), (0, 1), (-1, 0), (0, -1))
+    state['zero_pos'] = find_zero(state)
+    return state
+
 def     init_neighbor_state(cur_state, movement):
     neighbor = {}
     new_board = list(cur_state.board)
@@ -53,9 +65,34 @@ def     init_neighbor_state(cur_state, movement):
     num_to_swap = new_board[new_zero] #[]?
     new_board[cur_state.zero] = num_to_swap
     new_board[new_zero] = 0
-    neighbor = init_state(cur_state.size, new_board)
+    neighbor = init_neighbor(cur_state.size, new_board)
     return neighbor
 
+def     make_goal(state):
+    #goal = np.arange(arrlength)
+    #goal = x.reshape(size, size)
+    goal = np.empty_like(state.size, state.size)
+    #goal = np.array
+    n = 0
+    num = 1
+
+    while num < math.sqrt(state.size):
+        for j in range(state.size + n):  # ->
+            goal[n][j] = num
+            num += 1
+        n += 1    
+        j = state.size - n
+        for i in range(n, state.size): # !
+            goal[i][state.size - n] = num
+            num += 1
+        for j in range (state.size - n, 0): # <-
+            goal[state.size - n][j] = num
+            num += 1
+        for i in range(state.size, 0 + n): # ¡
+            goal[i][-1 + n] = num
+            num += 1
+    return goal
+        
 
 def     neighbors(cur_state):
     neighbors = []
@@ -70,15 +107,15 @@ def     neighbors(cur_state):
     # get the map configs of where 0 could go
     # return those map configs as a tuple
 
-def     init_state(self, start):
+def     a_star(start):
     frontier = queue.PriorityQueue()
-    frontier.put(otherb)
+    frontier.put(start)
     came_from = {}    # dictionary containing states as keys and their origin state as value
     cost_so_far = {}  # dictionary with different states (map configs as tuples) that 
                       # have been explored as keys and their cost associated to get there as value
-    came_from[start] = None
+    came_from[start["board"] = start["board"]
     cost_so_far[start] = 0
-    goal = goal(start)
+    goal = make_goal(start)
     while not frontier.empty():
         current = frontier.get()
 
@@ -97,7 +134,5 @@ def     init_state(self, start):
                 came_from[next.board] = current
 
 
-def     algorithm()
 
-if __name__ == "__main__":
-    print(test)
+#if __name__ == "__main__":

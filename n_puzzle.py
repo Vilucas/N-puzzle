@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    N-puzzle.py                                        :+:      :+:    :+:    #
+#    n_puzzle.py                                        :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: viclucas <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 12:52:09 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/19 15:34:11 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,44 +14,46 @@ import sys
 import argparse
 import heapq
 import numpy as np
+import math
 
 from solvability import solvability 
 from generator import make_goal, make_puzzle
+from algorithm import a_star
 
 
-def     init_list(tmp, size):
+def     init_board(board_str):
     index, x1, y = 0, 0, 0
-    arrlength = len(tmp)
-    board = []
+    arrlength = 9
 
+    board_arr = board_str.split(", ")
+    print(board_arr)
+    size = int(math.sqrt(arrlength))
     x = np.arange(arrlength)
-    x = x.reshape(size,size)
-    otherb = np.empty_like(x)
+    x = x.reshape(size, size)
+    board = np.empty_like(x)
     while index < arrlength:
-        otherb[y][x1] = tmp[index]
+        board[y][x1] = board_arr[index]
         x1 += 1
         index += 1
         if (x1 == size):
             x1 = 0
             y += 1
-    return otherb
+    return tuple(board), size
 
-def     find_depart(board, size):
-    for y in range(size):
-        for x in range(size):
-            if board[y][x] == 0:
-                data = [y, x]
+def     find_zero(state):
+    for y in range(state["size"]):
+        for x in range(state["size"]):
+            if state["board"][y][x] == 0:
+                pos = [y, x]
                 break
-    return data
+    return pos
 
-def     init_state(size, board):
-    data = {}
-
-    data['board'] = tuple(board)
-    data['moves'] = ((1, 0), (0, 1), (-1, 0), (0, -1))
-    data['size_of_map'] = size
-    data['zero_pos'] = find_depart(board, size)
-    return data
+def     init_state(board_arr):
+    state = {}
+    state['board'], state['size'] = init_board(board_arr)
+    state['moves'] = ((1, 0), (0, 1), (-1, 0), (0, -1))
+    state['zero_pos'] = find_zero(state)
+    return state
 
 def     get_input():
     li = []
@@ -71,11 +73,12 @@ def     get_input():
 if __name__ == "__main__":
     
    # user_input = get_input()
-    size = 5
-    solvability(size)
-    tmp = make_puzzle(size, 1, 10000);
-    board = init_list(tmp, size);
-    print(board)
-    movements = init_state(size, board);
-    print(movements)
-#    algorithm(movements, user_input)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("puzzle", type=str, help="must be a solvable puzzle and size >= 3")
+    args = parser.parse_args()
+    f = open(args.puzzle).read()
+    print(f)
+    state = init_state(f)
+    #solvability(state)
+    print (state["board"])
+    a_star(state)

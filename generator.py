@@ -77,4 +77,7 @@ if __name__ == "__main__":
 	if args.size < 3:
 		print("Can't generate a puzzle with size lower than 2. It says so in the help.")
 		sys.exit(1)
-       # make_puzzle(sys.argv[1], sys
+    
+	puzzle = make_puzzle(args.size, args.solvable, args.iterations)
+	f = open("puzzle_" + str(args.size) + ".txt", "w")
+	f.write(str(puzzle).strip("[]"))
