@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 13:24:17 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/20 13:49:59 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,6 @@
 # Initiate cost_so_far
 # state = a particular map configuration
 
-from initial import find_zero
 import numpy as np
 import queue
 import math
@@ -75,7 +74,6 @@ def     make_goal(state):
             print('up', num)
             goal[i, n - 1] = num
             num += 1
-
     print("GOAL\n", goal)
     return goal
 
@@ -145,6 +143,57 @@ def     init_neighbor_state(cur_state, move):
     new_board[new_zero] = 0
     neighbor = init_neighbor(cur_state['size'], new_board)
     return neighbor
+
+def     make_goal(state):
+    #goal = np.arange(arrlength)
+    #goal = x.reshape(size, size)
+    goal = np.zeros((state['size'], state['size']), dtype=int)
+    #goal = np.array
+    n = 0
+    num = 1
+    t = 0
+    r = 0
+    s = 0
+    while num <= state['size']**2 + 1:
+        print('while', num)
+        for j in range(s, state['size'] - n):  # ->
+            if num >= state['size']**2:
+                print("GOAL\n", goal)
+                return goal
+            goal[n, j] = num
+            num += 1
+        if n >= 1:
+            s += 1
+        n += 1    
+        x = state['size'] - n
+        if num == state["size"]**2 - 1:
+            print("s", s, "state['size'] - n", state['size'] - n)
+            break
+        for i in range(n, state['size'] - t): # !
+            if num >= state['size']**2:
+                print("GOAL\n", goal)
+                return goal
+            goal[i, x] = num
+            num += 1
+        if num == state["size"]**2 - 1:
+            print("s =", s, "state['size'] - n =", state['size'] - n)
+            break
+        t += 1
+        for z in range(x - 1, -1 + r, -1): # <-
+            if num >= state['size']**2:
+                print("GOAL\n", goal)
+                return goal
+            goal[x, z] = num
+            num += 1
+        r += 1
+        for i in range(state['size'] - n - 1, 0 + n, -1): # ¡
+            if num >= state['size']**2:
+                print("GOAL\n", goal)
+                return goal
+            goal[i, n - 1] = num
+            num += 1
+    print("GOAL\n", goal)
+    return goal
 
 def     neighbors(cur_state):
     neighbors = []
