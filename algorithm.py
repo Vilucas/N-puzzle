@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 19:54:40 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/20 11:01:26 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,6 @@
 # Initiate cost_so_far
 # state = a particular map configuration
 
-from initial import find_zero
 import numpy as np
 import queue
 import math
@@ -98,7 +97,6 @@ def     make_goal(state):
                 print("GOAL\n", goal)
                 return goal
             goal[n, j] = num
-            print('right', num)
             num += 1
         if n >= 1:
             s += 1
@@ -112,7 +110,6 @@ def     make_goal(state):
                 print("GOAL\n", goal)
                 return goal
             goal[i, x] = num
-            print('down', num)
             num += 1
         if num == state["size"]**2 - 1:
             print("s =", s, "state['size'] - n =", state['size'] - n)
@@ -122,7 +119,6 @@ def     make_goal(state):
             if num >= state['size']**2:
                 print("GOAL\n", goal)
                 return goal
-            print('left', num)
             goal[x, z] = num
             num += 1
         r += 1
@@ -130,10 +126,8 @@ def     make_goal(state):
             if num >= state['size']**2:
                 print("GOAL\n", goal)
                 return goal
-            print('up', num)
             goal[i, n - 1] = num
             num += 1
-
     print("GOAL\n", goal)
     return goal
         

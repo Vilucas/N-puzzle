@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 19:57:24 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/19 22:14:28 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ import math
 
 from solvability import solvability, find_zero 
 from generator import make_goal, make_puzzle
-from algorithm import a_star
+#from algorithm import a_star
 
 #from algorithm import a_star
 
@@ -61,7 +61,7 @@ def     get_input():
         li.append(int(input()))
         if li[0] > 2 or li[0] < 0:
             raise(True)
-        print("Choose a Heuristic :\n" + "1- \n" + "2- \n" + "$>", end = ' ')
+        print("Choose a Heuristic :\n" + "1- Manathan\n" + "2- Hamming\n" + "$>", end = ' ')
         li.append(int(input()))
         if li[1] > 2 or li[1] < 0:
             raise(True)
@@ -80,5 +80,5 @@ if __name__ == "__main__":
     print(f)
     state = init_state(f)
     print(state['board'])
-    a_star(state)
-    #solvability(state)
+    #a_star(state)
+    solvability(state)
