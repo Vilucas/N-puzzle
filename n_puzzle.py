@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 14:05:28 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/20 14:11:07 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,7 +87,6 @@ if __name__ == "__main__":
     print(f)
     p_item = PrioritizedItem(priority=0, state=init_state(f))
     print("  ORIGINAL\n", np.array(p_item.state['board']))
-    make_goal(p_item.state)
-    #a_star(p_item)
+    a_star(p_item)
     #solvability(state)
 

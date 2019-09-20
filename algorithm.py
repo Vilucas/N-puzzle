@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 14:01:39 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/20 14:46:29 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -165,7 +165,7 @@ def     a_star(start):
     came_from = {}    # dictionary containing states as keys and their origin state as value
     cost_so_far = {}  # dictionary with different states (map configs as tuples) that 
                       # have been explored as keys and their cost associated to get there as value
-    came_from[start.state['board']] = start.state['board']
+    came_from[start.state['board']] = 0 # start.state['board']
     cost_so_far[start.state['board']] = 0
     goal = make_goal(start.state)
     i = 0
@@ -216,10 +216,17 @@ def     a_star(start):
         i += 1
     print('start', np.array(start.state['board']))
     print('current', np.array(current['board']))
-    while not np.array_equal(np.array(current['board']), np.array(start.state['board'])):
-        print(np.array(current['board']))
-        current = came_from[current['board']]
-
-    print("LOOP: ", i)
-    print(np.array(current['board']))
     print('MAX_STATES', max_states)
+    print("LOOP: ", i)
+    print('TRAJECTORYYY')
+    #cur = current['board']
+    while True:
+        if np.array_equal(np.array(current['board']), np.array(start.state['board'])):
+        #if np.array_equal(np.array(cur), np.array(start.state['board'])):
+        #if current == 0:
+            print('END OF THE ROAD')
+            break
+        current['board'] = came_from[current['board']]
+        print(np.array(current['board']), '\n')
+
+    #print(np.array(current['board']))
