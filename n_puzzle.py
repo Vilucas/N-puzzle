@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    n_puzzle.py                                        :+:      :+:    :+:    #
+#    N-puzzle.py                                        :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
+#    By: viclucas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 18:34:55 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/19 19:26:27 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,6 @@ import sys
 import argparse
 import heapq
 import numpy as np
-import math
 
 from solvability import solvability, find_zero 
 from generator import make_goal, make_puzzle
@@ -42,7 +41,7 @@ def     init_board(board_str):
         if (x == size):
             x = 0
             y += 1
-    return tuple(board), size
+    return otherb
 
 def     find_zero(state):
     pos = []
