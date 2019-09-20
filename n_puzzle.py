@@ -6,7 +6,7 @@
 #    By: viclucas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 15:24:05 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/19 19:26:27 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,43 +15,49 @@ import argparse
 import heapq
 import numpy as np
 
-from solvability import solvability 
+from solvability import solvability, find_zero 
 from generator import make_goal, make_puzzle
 
+#from algorithm import a_star
 
-def     init_list(tmp, size):
-    index, x1, y = 0, 0, 0
-    arrlength = len(tmp)
-    board = []
+#Formatting of the fichier ?
 
-    x = np.arange(arrlength)
-    x = x.reshape(size,size)
-    otherb = np.empty_like(x)
+def     init_board(board_str):
+    index, x, y = 0, 0, 0
+
+    board_arr = board_str.split(", ")
+    arrlength = len(board_arr)
+    size = int(math.sqrt(arrlength))
+    if size * size != arrlength:
+        print("Invalid dimensions")
+        sys.exit()
+    init_board = np.arange(arrlength)
+    init_board = init_board.reshape(size, size)
+    board = np.empty_like(init_board)
     while index < arrlength:
-        otherb[y][x1] = tmp[index]
-        x1 += 1
+        board[y][x] = board_arr[index]
+        x += 1
         index += 1
-        if (x1 == size):
-            x1 = 0
+        if (x == size):
+            x = 0
             y += 1
     return otherb
 
-def     find_depart(board, size):
-    for y in range(size):
-        for x in range(size):
-            if board[y][x] == 0:
-                data = [y, x]
+def     find_zero(state):
+    pos = []
+    for y in range(state["size"]):
+        for x in range(state["size"]):
+            if state["board"][y][x] == 0:
+                pos = [y, x]
                 break
-    return data
+    return pos
 
-def     init_state(size, board):
-    data = {}
-
-    data['board'] = tuple(board)
-    data['moves'] = ((1, 0), (0, 1), (-1, 0), (0, -1))
-    data['size'] = size
-    data['zero_pos'] = find_depart(board, size)
-    return data
+def     init_state(board_arr):
+    state = {}
+    state['board'], state['size'] = init_board(board_arr)
+    state['moves'] = ((1, 0), (0, 1), (-1, 0), (0, -1))
+    state['zero_pos'] = find_zero(state)
+    return state
 
 def     get_input():
     li = []
@@ -71,11 +77,13 @@ def     get_input():
 
 
 if __name__ == "__main__":
-
     #user_input = get_input()
-    size = 5
-    tmp = make_puzzle(size, 1, 10000);
-    board = init_list(tmp, size);
-    movements = init_state(size, board);
-    solvability(movements)
-#    algorithm(movements, user_input)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("puzzle", type=str, help="must be a solvable puzzle and size >= 3")
+    args = parser.parse_args()
+    f = open(args.puzzle).read()
+    print(f)
+    state = init_state(f)
+    print(state['board'])
+    #a_star(state)
+    solvability(state)
