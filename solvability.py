@@ -6,7 +6,7 @@
 #    By: viclucas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/19 11:59:49 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 13:40:45 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/20 14:43:12 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 import copy
@@ -54,24 +54,15 @@ def     first_checks(state):
 def     complexity_value(state, final_board):
     board = from_tuples_to_list(state['board'])
     final_board = from_tuples_to_list(final_board)
-    print(board)
-    print(final_board)
-    exit()
     i, var = 0, 0
     while i < len(board):
-        print(board[i])
-        print(final_board[i])
         if board[i] != final_board[i]:
-            print(board[i]," - ",final_board[i])
             for x in range(len(final_board)):
-                print("---- ", final_board[x], "--",board[i])
                 if board[i] == final_board[x]:
-                    print("1", board[i])
                     tmp = board[x]
                     board[x] = final_board[x]
                     board[i] = tmp
                     var += 1
-                    print("2", board[i])
             i = 0
         else:
             i += 1
