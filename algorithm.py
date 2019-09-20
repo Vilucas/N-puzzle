@@ -6,10 +6,10 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 19:21:28 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/19 19:49:19 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-"""
+
 # initiate priority queue
 # Enqueue the initial position
 # Define came_from array
@@ -24,7 +24,6 @@ import queue
 import math
 import operator
 
-print("sdf")
 # this can get more efficient if we are able to access the current number in the goal with math
 
 def     manhattan_dist(cur_state, goal):
@@ -169,11 +168,3 @@ def     a_star(start):
                 # We add to our dictionary 
                 came_from[next['board']] = current
                 print(next['board'])
-
-
-
-#if __name__ == "__main__":
-<<<<<<< HEAD
-"""
-=======
->>>>>>> master
