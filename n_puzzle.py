@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 13:41:19 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/20 13:47:16 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,14 @@ import math
 
 from solvability import solvability, find_zero 
 from generator import make_goal, make_puzzle
-#from algorithm import a_star
+from algorithm import a_star
+from dataclasses import dataclass, field
+from typing import Any
 
-#from algorithm import a_star
+@dataclass(order=True)
+class PrioritizedItem:
+    priority: int
+    state: Any=field(compare=False)
 
 #Formatting of the fichier ?
 
@@ -78,7 +83,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     f = open(args.puzzle).read()
     print(f)
-    state = init_state(f)
-    print(state['board'])
-    #a_star(state)
-    solvability(state)
+    p_item = PrioritizedItem(priority=0, state=init_state(f))
+    print("  ORIGINAL\n", np.array(p_item.state['board']))
+    a_star(p_item)
+    #solvability(state)

@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 11:01:26 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/20 13:49:59 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,60 @@ import numpy as np
 import queue
 import math
 import operator
+from dataclasses import dataclass, field
+from typing import Any
+
+@dataclass(order=True)
+class PrioritizedItem:
+    priority: int
+    state: Any=field(compare=False)
 
 # this can get more efficient if we are able to access the current number in the goal with math
+def     make_goal(state):
+    goal = np.zeros((state['size'], state['size']), dtype=int)
+    n = 0
+    num = 1
+    t = 0
+    r = 0
+    s = 0
+    while num <= state['size']**2:
+        print('while', num)
+        for j in range(s, state['size'] - n):  # ->
+            if num >= state['size']**2:
+                print("  GOAL\n", goal)
+                return goal
+            goal[n, j] = num
+            print('right', num)
+            num += 1
+        if n >= 1:
+            s += 1
+        n += 1    
+        x = state['size'] - n
+        for i in range(n, state['size'] - t): # !
+            if num >= state['size']**2:
+                print("DOWN GOAL\n", goal)
+                return goal
+            goal[i, x] = num
+            print('down', num)
+            num += 1
+        t += 1
+        for z in range(x - 1, -1 + r, -1): # <-
+            if num >= state['size']**2:
+                print("LEFT GOAL\n", goal)
+                return goal
+            print('left', num)
+            goal[x, z] = num
+            num += 1
+        r += 1
+        for i in range(state['size'] - n - 1, 0 + n, -1): # ¡
+            if num >= state['size']**2:
+                print("UP GOAL\n", goal)
+                return goal
+            print('up', num)
+            goal[i, n - 1] = num
+            num += 1
+    print("GOAL\n", goal)
+    return goal
 
 def     find_zero(state):
     pos = []
@@ -34,6 +86,7 @@ def     find_zero(state):
                 break
     return pos
 
+# for length 3 +230 states .4 s
 def     manhattan_dist(cur_state, goal):
     cur_num = None
     cur_dist = 0
@@ -50,6 +103,14 @@ def     manhattan_dist(cur_state, goal):
                         distances.append(cur_dist)
     return sum(distances)
 
+# for length 3 +1500 states .646 s
+def     hamming_dist(cur_state, goal):
+    cur_dist = 0
+    for x in range(cur_state['size']):
+        for z in range(cur_state['size']):
+            if cur_state['board'][x][z] != goal[x][z]:
+                cur_dist += 1
+    return cur_dist
 
 def     valid_move(cur_state, move):
     new_pos = tuple(map(operator.add, cur_state['zero_pos'], move))
@@ -62,8 +123,11 @@ def     valid_move(cur_state, move):
         return True
     return False
 
+## both heuristics 23000 states, 1 min
+
 def     init_neighbor(size, new_board):
     state = {}
+
     state['board'] = tuple(map(tuple, new_board))
     state['size'] = size
     state['moves'] = ((1, 0), (0, 1), (-1, 0), (0, -1))
@@ -75,7 +139,7 @@ def     init_neighbor_state(cur_state, move):
     new_board = np.array(cur_state['board'])
     new_zero = tuple(map(operator.add, cur_state['zero_pos'], move))
     num_to_swap = new_board[new_zero] #[]?
-    new_board[cur_state['zero_pos']] = num_to_swap
+    new_board[cur_state['zero_pos'][0]][cur_state['zero_pos'][1]] = num_to_swap
     new_board[new_zero] = 0
     neighbor = init_neighbor(cur_state['size'], new_board)
     return neighbor
@@ -130,13 +194,12 @@ def     make_goal(state):
             num += 1
     print("GOAL\n", goal)
     return goal
-        
 
 def     neighbors(cur_state):
     neighbors = []
     for move in cur_state["moves"]:
         if valid_move(cur_state, move):
-            neighbor = init_neighbor_state(cur_state, move)
+            neighbor = PrioritizedItem(priority=0, state=init_neighbor_state(cur_state, move))
             neighbors.append(neighbor)
     return neighbors
 
@@ -147,27 +210,59 @@ def     neighbors(cur_state):
 
 def     a_star(start):
     frontier = queue.PriorityQueue()
-    frontier.put(start)
+    frontier.put((start.priority, start))
     came_from = {}    # dictionary containing states as keys and their origin state as value
     cost_so_far = {}  # dictionary with different states (map configs as tuples) that 
                       # have been explored as keys and their cost associated to get there as value
-    came_from[start['board']] = start['board']
-    cost_so_far[start['board']] = 0
-    goal = make_goal(start)
+    came_from[start.state['board']] = start.state['board']
+    cost_so_far[start.state['board']] = 0
+    goal = make_goal(start.state)
+    i = 0
+    max_states = 0
+    len_states = 0
     while not frontier.empty():
-        current = frontier.get()
-
+        #print("FRONTIER QUEUE\n\n", frontier.queue)
+        p_item = frontier.get()
+        #print('cur_prior', p_item[0])
+        current = p_item[1].state
+        #print("CURRENT", current, "\n\n")
+        #print("current board\n",'\n'.join(' '.join(str(cell) for cell in row) for row in np.array(current["board"])))
+        #print("current priority\n", p_item.priority)
+        #print('equality\n', np.array(current["board"]), np.array(goal))
+        #print("manhattan dist", manhattan_dist(current, goal))
         if np.array_equal(np.array(current["board"]), np.array(goal)):
+            print("reached goal?")
             break
+        len_states = len(list(frontier.queue))
+        if (len_states > max_states):
+            max_states = len_states 
+        #print('total priorities', len_states)
+        #for z in frontier.queue:
+        #   print('prt', z[1].priority)
 
         for next in neighbors(current):
+            #next = i.state
+            # The costs so far include the costs to get to that particular state from the source
             new_cost = cost_so_far[current['board']] + 1 # 1 is step cost
+            #print("new_cost")
             # We will add the state to the PQ if the new cost for getting to that state is less
             # than what was previously the cost for that state or if the state is not in the costs
-            if next['board'] not in cost_so_far or new_cost < cost_so_far[next['board']]: 
-                cost_so_far[next['board']] = new_cost
-                priority = new_cost + manhattan_dist(next, goal)
-                frontier.put(priority, next)
+            if next.state['board'] not in cost_so_far or new_cost < cost_so_far[next.state['board']]: 
+                cost_so_far[next.state['board']] = new_cost
+                next.priority = new_cost + manhattan_dist(next.state, goal + hamming_dist(next.state, goal))
+                #next.priority = new_cost + hamming_dist(next.state, goal)
+                #print('new_cost', new_cost)
+                #print('manhattan dist', manhattan_dist(next.state, goal))
+                frontier.put((next.priority, next))
+                #frontier.sort(reversed=True)
                 # We add to our dictionary 
-                came_from[next['board']] = current
-                print(next['board'])
+                came_from[next.state['board']] = current['board']
+                #print('NEXT', np.array(next.state['board']))
+        #if i == 10:
+        #    while not frontier.empty():
+        #        print('prt', frontier.get()[1].priority)
+        #    break
+        i += 1
+    print("LOOP: ", i)
+    print(np.array(current['board']))
+    print('MAX_STATES', max_states)
