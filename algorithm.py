@@ -83,7 +83,7 @@ def     make_goal(state):
     t = 0
     r = 0
     s = 0
-    while num <= state['size']**2:
+    while num <= state['size']**2 + 1:
         print('while', num)
         for j in range(s, state['size'] - n):  # ->
             if num >= state['size']**2:
@@ -92,10 +92,13 @@ def     make_goal(state):
             goal[n, j] = num
             print('right', num)
             num += 1
-            if n >= 1:
-                s += 1
+        if n >= 1:
+            s += 1
         n += 1    
         x = state['size'] - n
+        if num == state["size"]**2 - 1:
+            print("s", s, "state['size'] - n", state['size'] - n)
+            break
         for i in range(n, state['size'] - t): # !
             if num >= state['size']**2:
                 print("GOAL\n", goal)
@@ -103,6 +106,9 @@ def     make_goal(state):
             goal[i, x] = num
             print('down', num)
             num += 1
+        if num == state["size"]**2 - 1:
+            print("s =", s, "state['size'] - n =", state['size'] - n)
+            break
         t += 1
         for z in range(x - 1, -1 + r, -1): # <-
             if num >= state['size']**2:
@@ -119,11 +125,9 @@ def     make_goal(state):
             print('up', num)
             goal[i, n - 1] = num
             num += 1
-        if num == state["size"]**2:
-            break
+
     print("GOAL\n", goal)
     return goal
-
         
 
 def     neighbors(cur_state):
