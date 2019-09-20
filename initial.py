@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 19:22:44 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/19 19:50:35 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ import heapq
 import numpy as np
 import math
 
-from solvability import solvability 
+#from solvability import solvability 
 from generator import make_goal, make_puzzle
 
 
