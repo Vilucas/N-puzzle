@@ -6,14 +6,13 @@
 #    By: viclucas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/19 11:59:49 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 13:29:06 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/20 13:40:45 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 import copy
 import sys
 from algorithm import make_goal
 import numpy as np
-
 
 def     from_tuples_to_list(board_init):
     board = []
