@@ -85,7 +85,6 @@ if __name__ == "__main__":
     print(f)
     p_item = PrioritizedItem(priority=0, state=init_state(f))
     print("  ORIGINAL\n", np.array(p_item.state['board']))
-    make_goal(p_item.state)
-    #a_star(p_item)
+    a_star(p_item)
     #solvability(state)
 
