@@ -24,7 +24,7 @@ import queue
 import math
 import operator
 
-
+print("sdf")
 # this can get more efficient if we are able to access the current number in the goal with math
 
 def     manhattan_dist(cur_state, goal):
