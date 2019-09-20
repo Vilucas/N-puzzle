@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 15:51:00 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/19 18:34:55 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,31 +16,36 @@ import heapq
 import numpy as np
 import math
 
-from solvability import solvability 
+from solvability import solvability, find_zero 
 from generator import make_goal, make_puzzle
-from algorithm import a_star
 
+#from algorithm import a_star
+
+#Formatting of the fichier ?
 
 def     init_board(board_str):
-    index, x1, y = 0, 0, 0
-    arrlength = 9
+    index, x, y = 0, 0, 0
 
     board_arr = board_str.split(", ")
-    print(board_arr)
+    arrlength = len(board_arr)
     size = int(math.sqrt(arrlength))
-    x = np.arange(arrlength)
-    x = x.reshape(size, size)
-    board = np.empty_like(x)
+    if size * size != arrlength:
+        print("Invalid dimensions")
+        sys.exit()
+    init_board = np.arange(arrlength)
+    init_board = init_board.reshape(size, size)
+    board = np.empty_like(init_board)
     while index < arrlength:
-        board[y][x1] = board_arr[index]
-        x1 += 1
+        board[y][x] = board_arr[index]
+        x += 1
         index += 1
-        if (x1 == size):
-            x1 = 0
+        if (x == size):
+            x = 0
             y += 1
     return tuple(board), size
 
 def     find_zero(state):
+    pos = []
     for y in range(state["size"]):
         for x in range(state["size"]):
             if state["board"][y][x] == 0:
@@ -80,6 +85,6 @@ if __name__ == "__main__":
     f = open(args.puzzle).read()
     print(f)
     state = init_state(f)
-    #solvability(state)
-    a_star(state)
+    print(state['board'])
+    #a_star(state)
     solvability(state)

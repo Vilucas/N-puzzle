@@ -6,10 +6,10 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 15:43:11 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/19 18:35:37 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
+"""
 # initiate priority queue
 # Enqueue the initial position
 # Define came_from array
@@ -136,3 +136,4 @@ def     a_star(start):
 
 
 #if __name__ == "__main__":
+"""
