@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    N-puzzle.py                                        :+:      :+:    :+:    #
+#    n_puzzle.py                                        :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: viclucas <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 19:26:27 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/19 19:57:24 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,11 @@ import sys
 import argparse
 import heapq
 import numpy as np
+import math
 
 from solvability import solvability, find_zero 
 from generator import make_goal, make_puzzle
+from algorithm import a_star
 
 #from algorithm import a_star
 
@@ -41,16 +43,9 @@ def     init_board(board_str):
         if (x == size):
             x = 0
             y += 1
-    return otherb
+    return tuple(map(tuple, board)), size
 
-def     find_zero(state):
-    pos = []
-    for y in range(state["size"]):
-        for x in range(state["size"]):
-            if state["board"][y][x] == 0:
-                pos = [y, x]
-                break
-    return pos
+
 
 def     init_state(board_arr):
     state = {}
@@ -85,5 +80,5 @@ if __name__ == "__main__":
     print(f)
     state = init_state(f)
     print(state['board'])
-    #a_star(state)
-    solvability(state)
+    a_star(state)
+    #solvability(state)

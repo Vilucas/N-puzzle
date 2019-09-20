@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/19 19:49:19 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/19 19:54:40 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,15 @@ import math
 import operator
 
 # this can get more efficient if we are able to access the current number in the goal with math
+
+def     find_zero(state):
+    pos = []
+    for y in range(state["size"]):
+        for x in range(state["size"]):
+            if state["board"][y][x] == 0:
+                pos = [y, x]
+                break
+    return pos
 
 def     manhattan_dist(cur_state, goal):
     cur_num = None
