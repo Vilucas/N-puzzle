@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 14:11:07 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/20 14:12:23 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,6 @@ from typing import Any
 class PrioritizedItem:
     priority: int
     state: Any=field(compare=False)
-
-#from algorithm import a_star
 
 #Formatting of the fichier ?
 
@@ -68,7 +66,7 @@ def     get_input():
         li.append(int(input()))
         if li[0] > 2 or li[0] < 0:
             raise(True)
-        print("Choose a Heuristic :\n" + "1- \n" + "2- \n" + "$>", end = ' ')
+        print("Choose a Heuristic :\n" + "1- Manathan\n" + "2- Hamming\n" + "$>", end = ' ')
         li.append(int(input()))
         if li[1] > 2 or li[1] < 0:
             raise(True)
