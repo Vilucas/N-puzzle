@@ -6,7 +6,11 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
+<<<<<<< HEAD
+#    Updated: 2019/09/20 14:01:39 by jcruz-y-         ###   ########.fr        #
+=======
 #    Updated: 2019/09/20 13:49:59 by viclucas         ###   ########.fr        #
+>>>>>>> master
 #                                                                              #
 # **************************************************************************** #
 
@@ -249,7 +253,7 @@ def     a_star(start):
             # than what was previously the cost for that state or if the state is not in the costs
             if next.state['board'] not in cost_so_far or new_cost < cost_so_far[next.state['board']]: 
                 cost_so_far[next.state['board']] = new_cost
-                next.priority = new_cost + manhattan_dist(next.state, goal + hamming_dist(next.state, goal))
+                next.priority = new_cost + manhattan_dist(next.state, goal)
                 #next.priority = new_cost + hamming_dist(next.state, goal)
                 #print('new_cost', new_cost)
                 #print('manhattan dist', manhattan_dist(next.state, goal))
@@ -263,6 +267,12 @@ def     a_star(start):
         #        print('prt', frontier.get()[1].priority)
         #    break
         i += 1
+    print('start', np.array(start.state['board']))
+    print('current', np.array(current['board']))
+    while not np.array_equal(np.array(current['board']), np.array(start.state['board'])):
+        print(np.array(current['board']))
+        current = came_from[current['board']]
+
     print("LOOP: ", i)
     print(np.array(current['board']))
     print('MAX_STATES', max_states)
