@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 14:12:23 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/20 17:52:05 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,13 +41,17 @@ def     init_board(board_str):
     init_board = np.arange(arrlength)
     init_board = init_board.reshape(size, size)
     board = np.empty_like(init_board)
-    while index < arrlength:
-        board[y][x] = board_arr[index]
-        x += 1
-        index += 1
-        if (x == size):
-            x = 0
-            y += 1
+    try:
+        while index < arrlength:
+            board[y][x] = board_arr[index]
+            x += 1
+            index += 1
+            if (x == size):
+                x = 0
+                y += 1
+    except:
+        print("What are you trying to do ? Exiting...")
+        exit()
     return tuple(map(tuple, board)), size
 
 
@@ -71,7 +75,7 @@ def     get_input():
         if li[1] > 2 or li[1] < 0:
             raise(True)
     except:
-        print("Your input is not correct")
+        print("Your input is not correct Exiting...")
         sys.exit()
     return li
 
@@ -81,10 +85,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("puzzle", type=str, help="must be a solvable puzzle and size >= 3")
     args = parser.parse_args()
-    f = open(args.puzzle).read()
-    print(f)
+    try:
+        f = open(args.puzzle).read()
+    except:
+        print("Not a valid File, Exiting")
+        exit()
+    state = init_state(f)
+    solvability(state)
     p_item = PrioritizedItem(priority=0, state=init_state(f))
-    print("  ORIGINAL\n", np.array(p_item.state['board']))
+    #print("  ORIGINAL\n", np.array(p_item.state['board']))
     a_star(p_item)
-    #solvability(state)
-

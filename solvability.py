@@ -6,7 +6,7 @@
 #    By: viclucas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/19 11:59:49 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 14:43:12 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/20 17:52:15 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 import copy
@@ -34,9 +34,6 @@ def     first_checks(state):
     #board, flag = state['board'], 0
     flag = 0 
     board = list(state['board'])
-  
-    print(board)
-
 #    if state['size'] < 3 or state['size'] > 5:
 #       print("size of the puzzle has to be between 3x3 and 5x5, Exiting ...")
 #       sys.exit()

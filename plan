@@ -1,8 +1,0 @@
--> have first data and store them in dico
--> first heuristic gives me depart node 
--> f = h + g (f is the man)
--> create the departure node and init all param
--> put the node in the machine and roll
--> new->data_collect
--> new->heuristique tells me who is node_2
--> create node_2 and repeat

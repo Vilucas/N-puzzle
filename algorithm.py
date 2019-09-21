@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 14:46:29 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/20 17:30:39 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,13 +39,10 @@ def     make_goal(state):
     r = 0
     s = 0
     while num <= state['size']**2:
-        print('while', num)
         for j in range(s, state['size'] - n):  # ->
             if num >= state['size']**2:
-                print("  GOAL\n", goal)
                 return goal
             goal[n, j] = num
-            print('right', num)
             num += 1
         if n >= 1:
             s += 1
@@ -53,28 +50,21 @@ def     make_goal(state):
         x = state['size'] - n
         for i in range(n, state['size'] - t): # !
             if num >= state['size']**2:
-                print("DOWN GOAL\n", goal)
                 return goal
             goal[i, x] = num
-            print('down', num)
             num += 1
         t += 1
         for z in range(x - 1, -1 + r, -1): # <-
             if num >= state['size']**2:
-                print("LEFT GOAL\n", goal)
                 return goal
-            print('left', num)
             goal[x, z] = num
             num += 1
         r += 1
         for i in range(state['size'] - n - 1, 0 + n, -1): # ¡
             if num >= state['size']**2:
-                print("UP GOAL\n", goal)
                 return goal
-            print('up', num)
             goal[i, n - 1] = num
             num += 1
-    print("GOAL\n", goal)
     return goal
 
 def     find_zero(state):
@@ -144,57 +134,6 @@ def     init_neighbor_state(cur_state, move):
     neighbor = init_neighbor(cur_state['size'], new_board)
     return neighbor
 
-def     make_goal(state):
-    #goal = np.arange(arrlength)
-    #goal = x.reshape(size, size)
-    goal = np.zeros((state['size'], state['size']), dtype=int)
-    #goal = np.array
-    n = 0
-    num = 1
-    t = 0
-    r = 0
-    s = 0
-    while num <= state['size']**2 + 1:
-        print('while', num)
-        for j in range(s, state['size'] - n):  # ->
-            if num >= state['size']**2:
-                print("GOAL\n", goal)
-                return goal
-            goal[n, j] = num
-            num += 1
-        if n >= 1:
-            s += 1
-        n += 1    
-        x = state['size'] - n
-        if num == state["size"]**2 - 1:
-            print("s", s, "state['size'] - n", state['size'] - n)
-            break
-        for i in range(n, state['size'] - t): # !
-            if num >= state['size']**2:
-                print("GOAL\n", goal)
-                return goal
-            goal[i, x] = num
-            num += 1
-        if num == state["size"]**2 - 1:
-            print("s =", s, "state['size'] - n =", state['size'] - n)
-            break
-        t += 1
-        for z in range(x - 1, -1 + r, -1): # <-
-            if num >= state['size']**2:
-                print("GOAL\n", goal)
-                return goal
-            goal[x, z] = num
-            num += 1
-        r += 1
-        for i in range(state['size'] - n - 1, 0 + n, -1): # ¡
-            if num >= state['size']**2:
-                print("GOAL\n", goal)
-                return goal
-            goal[i, n - 1] = num
-            num += 1
-    print("GOAL\n", goal)
-    return goal
-
 def     neighbors(cur_state):
     neighbors = []
     for move in cur_state["moves"]:
@@ -231,7 +170,6 @@ def     a_star(start):
         #print('equality\n', np.array(current["board"]), np.array(goal))
         #print("manhattan dist", manhattan_dist(current, goal))
         if np.array_equal(np.array(current["board"]), np.array(goal)):
-            print("reached goal?")
             break
         len_states = len(list(frontier.queue))
         if (len_states > max_states):
@@ -273,7 +211,6 @@ def     a_star(start):
         if np.array_equal(np.array(current['board']), np.array(start.state['board'])):
         #if np.array_equal(np.array(cur), np.array(start.state['board'])):
         #if current == 0:
-            print('END OF THE ROAD')
             break
         current['board'] = came_from[current['board']]
         print(np.array(current['board']), '\n')
