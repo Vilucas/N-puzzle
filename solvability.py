@@ -6,7 +6,7 @@
 #    By: viclucas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/19 11:59:49 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 17:52:15 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/20 18:24:28 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 import copy
@@ -30,13 +30,15 @@ def     find_zero(state):
                 break
     return pos
 
+
+
+#   Checking doublon and if the map is a square
 def     first_checks(state):
-    #board, flag = state['board'], 0
     flag = 0 
     board = list(state['board'])
-#    if state['size'] < 3 or state['size'] > 5:
-#       print("size of the puzzle has to be between 3x3 and 5x5, Exiting ...")
-#       sys.exit()
+    if state['size'] < 3 or state['size'] > 10:
+        print("size of the puzzle has to be between 3x3 and 10x10, Exiting ...")
+        sys.exit()
     for i in range(state['size'] * state['size']):
         for y in range(state['size']):
             for x in range(state['size']):
@@ -48,6 +50,10 @@ def     first_checks(state):
         flag = 0
     return True
 
+
+
+#   Calcul of the number of transposition we have to do to resolve the game
+#   Return True if even, False if odd
 def     complexity_value(state, final_board):
     board = from_tuples_to_list(state['board'])
     final_board = from_tuples_to_list(final_board)
@@ -68,16 +74,20 @@ def     complexity_value(state, final_board):
         return False
     return True
 
+#   Calcul the distance between 0 and his final destination one square cost 1
+#   Return True if even, False if odd
 def     zero_factor(state, final_board):
     zero = state['zero_pos']
     state['board'] = final_board
     final_zero = find_zero(state)
     var = (final_zero[0] - zero[0] + final_zero[1] - zero[1])
-    var = abs(var)
-    if (var % 2 != 0):
+    if (abs(var) % 2 != 0):
         return False
     return True
 
+#   If the distance between Zero (the empty square) toward his final destination and
+#   the number of transposition we have to do to resolve the game are both even or 
+#   odd numbers then the puzzle is resolvable otherwise its not
 def     solvability(state):
     first_checks(state)
     final_board = make_goal(state)
@@ -86,5 +96,3 @@ def     solvability(state):
     if (comp != zero):
         print("Not Solvable Exiting...")
         sys.exit()
-        return False
-    return True

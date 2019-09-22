@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 17:52:05 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/21 17:38:59 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,14 +21,14 @@ from generator import make_goal, make_puzzle
 from algorithm import a_star, make_goal
 from dataclasses import dataclass, field
 from typing import Any
+from parsing import reshape_board
 
 @dataclass(order=True)
 class PrioritizedItem:
     priority: int
     state: Any=field(compare=False)
 
-#Formatting of the fichier ?
-
+#   Get file into tuples
 def     init_board(board_str):
     index, x, y = 0, 0, 0
 
@@ -36,7 +36,7 @@ def     init_board(board_str):
     arrlength = len(board_arr)
     size = int(math.sqrt(arrlength))
     if size * size != arrlength:
-        print("Invalid dimensions")
+        print("Invalid dimensions, Exiting...")
         sys.exit()
     init_board = np.arange(arrlength)
     init_board = init_board.reshape(size, size)
@@ -50,12 +50,12 @@ def     init_board(board_str):
                 x = 0
                 y += 1
     except:
-        print("What are you trying to do ? Exiting...")
+        print("File horribly formated UwU, Exiting...")
         exit()
     return tuple(map(tuple, board)), size
 
 
-
+#   Init the dictionary
 def     init_state(board_arr):
     state = {}
     state['board'], state['size'] = init_board(board_arr)
@@ -63,35 +63,32 @@ def     init_state(board_arr):
     state['zero_pos'] = find_zero(state)
     return state
 
+#   Get user input on Algo and heuristic selection
 def     get_input():
     li = []
     try:
-        print("Choose an Algorithm :\n" + "1- A*\n" "2- Dijkstra's algorithm\n" + "$>", end = ' ')
+        print("Choose a Heuristic function :\n" + "1- Manathan\n" + "2- Hamming\n" + "3- K_double_rotor\n" + "$>", end = ' ')
         li.append(int(input()))
-        if li[0] > 2 or li[0] < 0:
-            raise(True)
-        print("Choose a Heuristic :\n" + "1- Manathan\n" + "2- Hamming\n" + "$>", end = ' ')
-        li.append(int(input()))
-        if li[1] > 2 or li[1] < 0:
+        if li[0] > 3 or li[0] < 1:
             raise(True)
     except:
-        print("Your input is not correct Exiting...")
+        print("Your input is not correct, Exiting...")
         sys.exit()
     return li
 
-
 if __name__ == "__main__":
-    #user_input = get_input()
     parser = argparse.ArgumentParser()
     parser.add_argument("puzzle", type=str, help="must be a solvable puzzle and size >= 3")
     args = parser.parse_args()
     try:
         f = open(args.puzzle).read()
     except:
-        print("Not a valid File, Exiting")
+        print("Not a valid File, Exiting...")
         exit()
-    state = init_state(f)
+    board = reshape_board(f)
+    state = init_state(board)
     solvability(state)
-    p_item = PrioritizedItem(priority=0, state=init_state(f))
+    p_item = PrioritizedItem(priority=0, state=init_state(board))
+    user_input = get_input()
     #print("  ORIGINAL\n", np.array(p_item.state['board']))
-    a_star(p_item)
+    a_star(p_item, user_input)

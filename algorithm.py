@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 17:30:39 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/20 20:06:45 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ import math
 import operator
 from dataclasses import dataclass, field
 from typing import Any
+from heuristic import heuristic
 
 @dataclass(order=True)
 class PrioritizedItem:
@@ -76,32 +77,6 @@ def     find_zero(state):
                 break
     return pos
 
-# for length 3 +230 states .4 s
-def     manhattan_dist(cur_state, goal):
-    cur_num = None
-    cur_dist = 0
-    distances = []
-    for x in range(cur_state['size']):
-        for z in range(cur_state['size']):
-            cur_num = cur_state['board'][x][z]
-            cur_pos = [x, z]
-            for i in range(cur_state['size']):
-                for j in range(cur_state['size']):
-                    if (cur_num == goal[i][j]):
-                        cur_dist = tuple(map(operator.sub, cur_pos, (i, j)))
-                        cur_dist = abs(cur_dist[0]) + abs(cur_dist[1])
-                        distances.append(cur_dist)
-    return sum(distances)
-
-# for length 3 +1500 states .646 s
-def     hamming_dist(cur_state, goal):
-    cur_dist = 0
-    for x in range(cur_state['size']):
-        for z in range(cur_state['size']):
-            if cur_state['board'][x][z] != goal[x][z]:
-                cur_dist += 1
-    return cur_dist
-
 def     valid_move(cur_state, move):
     new_pos = tuple(map(operator.add, cur_state['zero_pos'], move))
     board = cur_state['board']
@@ -147,7 +122,7 @@ def     neighbors(cur_state):
     # get the map configs of where 0 could go
     # return those map configs as a tuple
 
-def     a_star(start):
+def     a_star(start, user_input):
     frontier = queue.PriorityQueue()
     frontier.put((start.priority, start))
     came_from = {}    # dictionary containing states as keys and their origin state as value
@@ -187,8 +162,13 @@ def     a_star(start):
             # than what was previously the cost for that state or if the state is not in the costs
             if next.state['board'] not in cost_so_far or new_cost < cost_so_far[next.state['board']]: 
                 cost_so_far[next.state['board']] = new_cost
-                next.priority = new_cost + manhattan_dist(next.state, goal)
-                #next.priority = new_cost + hamming_dist(next.state, goal)
+                if user_input[0] == 1:
+                    next.priority = new_cost + heuristic.manhattan_dist(next.state, goal)
+                elif user_input[0] == 2:
+                    next.priority = new_cost + heuristic.hamming_dist(next.state, goal)
+                else:
+                    next.priority = new_cost + heuristic.K_double_rotor(next.state, goal)
+                    
                 #print('new_cost', new_cost)
                 #print('manhattan dist', manhattan_dist(next.state, goal))
                 frontier.put((next.priority, next))
