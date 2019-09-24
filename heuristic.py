@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/20 19:01:45 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/23 15:52:19 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/23 18:24:16 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,6 +89,7 @@ class   heuristic:
     def     manhattan_dist(cur_state, goal):
         cur_num = None
         distance = 0
+        #if 
         for x in range(cur_state['size']):
             for z in range(cur_state['size']):
                 if cur_state['board'][x][z] != goal[x][z]:

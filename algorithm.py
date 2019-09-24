@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/23 17:37:59 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/23 18:23:08 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -191,7 +191,7 @@ def     a_star(start, user_input):
         j += 1
         print(np.array(trajectory[i][0]), '\n')
 
-    print('P_Score:',  trajectory[0][1], 'Depth: ', j)
+    print('P_Score:', trajectory[0][1], 'Depth: ', j)
     print(np.array(trajectory[0][0]), '\n')
     print('STEPS:', traj)
 
