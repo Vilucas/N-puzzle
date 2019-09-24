@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 20:06:45 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/23 17:37:59 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,8 +74,7 @@ def     find_zero(state):
         for x in range(state["size"]):
             if state["board"][y][x] == 0:
                 pos = [y, x]
-                break
-    return pos
+                return pos
 
 def     valid_move(cur_state, move):
     new_pos = tuple(map(operator.add, cur_state['zero_pos'], move))
@@ -134,24 +133,17 @@ def     a_star(start, user_input):
     i = 0
     max_states = 0
     len_states = 0
+    fn_len = len
     while not frontier.empty():
         #print("FRONTIER QUEUE\n\n", frontier.queue)
         p_item = frontier.get()
-        #print('cur_prior', p_item[0])
         current = p_item[1].state
-        #print("CURRENT", current, "\n\n")
         #print("current board\n",'\n'.join(' '.join(str(cell) for cell in row) for row in np.array(current["board"])))
-        #print("current priority\n", p_item.priority)
-        #print('equality\n', np.array(current["board"]), np.array(goal))
-        #print("manhattan dist", manhattan_dist(current, goal))
         if np.array_equal(np.array(current["board"]), np.array(goal)):
             break
-        len_states = len(list(frontier.queue))
+        len_states = fn_len(list(frontier.queue))
         if (len_states > max_states):
             max_states = len_states 
-        #print('total priorities', len_states)
-        #for z in frontier.queue:
-        #   print('prt', z[1].priority)
 
         for next in neighbors(current):
             #next = i.state
@@ -163,36 +155,44 @@ def     a_star(start, user_input):
             if next.state['board'] not in cost_so_far or new_cost < cost_so_far[next.state['board']]: 
                 cost_so_far[next.state['board']] = new_cost
                 if user_input[0] == 1:
-                    next.priority = new_cost + heuristic.manhattan_dist(next.state, goal)
+                    next.priority = new_cost + heuristic.manhattan_dist(next.state, goal) 
                 elif user_input[0] == 2:
                     next.priority = new_cost + heuristic.hamming_dist(next.state, goal)
-                else:
+                elif user_input[0] == 3:
                     next.priority = new_cost + heuristic.K_double_rotor(next.state, goal)
-                    
-                #print('new_cost', new_cost)
-                #print('manhattan dist', manhattan_dist(next.state, goal))
+                elif user_input[0] == 4:
+                    next.priority = new_cost + heuristic.manhattan_dist(next.state, goal) + heuristic.linear_conflict(next.state, goal)
                 frontier.put((next.priority, next))
-                #frontier.sort(reversed=True)
-                # We add to our dictionary 
-                came_from[next.state['board']] = current['board']
-                #print('NEXT', np.array(next.state['board']))
+                # We add to our dictionary of traced boards
+                came_from[next.state['board']] = [current['board'], p_item[0]]
         #if i == 10:
         #    while not frontier.empty():
         #        print('prt', frontier.get()[1].priority)
         #    break
         i += 1
-    print('start', np.array(start.state['board']))
+    print('start\n', np.array(start.state['board']))
     print('current', np.array(current['board']))
     print('MAX_STATES', max_states)
     print("LOOP: ", i)
     print('TRAJECTORYYY')
-    #cur = current['board']
+    traj = 0
+    trajectory = []
+    #trajectory.append([current['board'], came_from[current['board'][1]]])
+    trajectory.append([current['board'], 0])
     while True:
         if np.array_equal(np.array(current['board']), np.array(start.state['board'])):
-        #if np.array_equal(np.array(cur), np.array(start.state['board'])):
-        #if current == 0:
             break
-        current['board'] = came_from[current['board']]
-        print(np.array(current['board']), '\n')
+        trajectory.append(came_from[current['board']])
+        current['board'] = came_from[current['board']][0]
+        traj += 1
+    j = 0
+    for i in range(len(trajectory) - 1, 0, -1):
+        print('P_Score:',  trajectory[i][1], 'Depth: ', j)
+        j += 1
+        print(np.array(trajectory[i][0]), '\n')
+
+    print('P_Score:',  trajectory[0][1], 'Depth: ', j)
+    print(np.array(trajectory[0][0]), '\n')
+    print('STEPS:', traj)
 
     #print(np.array(current['board']))

@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/21 17:38:59 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/23 11:07:13 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,9 +67,9 @@ def     init_state(board_arr):
 def     get_input():
     li = []
     try:
-        print("Choose a Heuristic function :\n" + "1- Manathan\n" + "2- Hamming\n" + "3- K_double_rotor\n" + "$>", end = ' ')
+        print("Choose a Heuristic function :\n" + "1- Manathan\n" + "2- Hamming\n" + "3- K_double_rotor\n" + "4- Manhattan + Linear Conflict\n" + "$>", end = ' ')
         li.append(int(input()))
-        if li[0] > 3 or li[0] < 1:
+        if li[0] > 4 or li[0] < 1:
             raise(True)
     except:
         print("Your input is not correct, Exiting...")
@@ -91,4 +91,5 @@ if __name__ == "__main__":
     p_item = PrioritizedItem(priority=0, state=init_state(board))
     user_input = get_input()
     #print("  ORIGINAL\n", np.array(p_item.state['board']))
+    #user_input = 1
     a_star(p_item, user_input)
