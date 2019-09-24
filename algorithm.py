@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/23 18:23:08 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/23 19:36:23 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -121,7 +121,7 @@ def     neighbors(cur_state):
     # get the map configs of where 0 could go
     # return those map configs as a tuple
 
-def     a_star(start, user_input):
+def     a_star(start, user_input, greedy):
     frontier = queue.PriorityQueue()
     frontier.put((start.priority, start))
     came_from = {}    # dictionary containing states as keys and their origin state as value
@@ -154,22 +154,10 @@ def     a_star(start, user_input):
             # than what was previously the cost for that state or if the state is not in the costs
             if next.state['board'] not in cost_so_far or new_cost < cost_so_far[next.state['board']]: 
                 cost_so_far[next.state['board']] = new_cost
-                if user_input[0] == 1:
-                    next.priority = new_cost + heuristic.manhattan_dist(next.state, goal) 
-                elif user_input[0] == 2:
-                    next.priority = new_cost + heuristic.hamming_dist(next.state, goal)
-                elif user_input[0] == 3:
-                    next.priority = new_cost + heuristic.K_double_rotor(next.state, goal)
-                elif user_input[0] == 4:
-                    next.priority = new_cost + heuristic.manhattan_dist(next.state, goal) + heuristic.linear_conflict(next.state, goal)
-                frontier.put((next.priority, next))
-                # We add to our dictionary of traced boards
+                next.priority = new_cost + user_input(next.state, goal) 
                 came_from[next.state['board']] = [current['board'], p_item[0]]
-        #if i == 10:
-        #    while not frontier.empty():
-        #        print('prt', frontier.get()[1].priority)
-        #    break
-        i += 1
+                frontier.put((next.priority, next))
+                i += 1
     print('start\n', np.array(start.state['board']))
     print('current', np.array(current['board']))
     print('MAX_STATES', max_states)
