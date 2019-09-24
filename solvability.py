@@ -3,13 +3,13 @@
 #                                                         :::      ::::::::    #
 #    solvability.py                                     :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: viclucas <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/19 11:59:49 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/20 18:24:28 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/23 21:39:00 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-import copy
+
 import sys
 from algorithm import make_goal
 import numpy as np
@@ -30,8 +30,6 @@ def     find_zero(state):
                 break
     return pos
 
-
-
 #   Checking doublon and if the map is a square
 def     first_checks(state):
     flag = 0 
@@ -49,8 +47,6 @@ def     first_checks(state):
             sys.exit()
         flag = 0
     return True
-
-
 
 #   Calcul of the number of transposition we have to do to resolve the game
 #   Return True if even, False if odd

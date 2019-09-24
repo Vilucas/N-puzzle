@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:00:58 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/23 19:36:23 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/23 21:39:02 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,13 +25,15 @@ import operator
 from dataclasses import dataclass, field
 from typing import Any
 from heuristic import heuristic
+import time
 
+# Class to ignore the dictionary fields of our state dictionary but compare priority
 @dataclass(order=True)
 class PrioritizedItem:
     priority: int
     state: Any=field(compare=False)
 
-# this can get more efficient if we are able to access the current number in the goal with math
+# Creates the final map
 def     make_goal(state):
     goal = np.zeros((state['size'], state['size']), dtype=int)
     n = 0
@@ -68,6 +70,7 @@ def     make_goal(state):
             num += 1
     return goal
 
+# Find zero in the map 
 def     find_zero(state):
     pos = []
     for y in range(state["size"]):
@@ -76,6 +79,7 @@ def     find_zero(state):
                 pos = [y, x]
                 return pos
 
+# Validate the move
 def     valid_move(cur_state, move):
     new_pos = tuple(map(operator.add, cur_state['zero_pos'], move))
     board = cur_state['board']
@@ -87,7 +91,6 @@ def     valid_move(cur_state, move):
         return True
     return False
 
-## both heuristics 23000 states, 1 min
 
 def     init_neighbor(size, new_board):
     state = {}
@@ -108,6 +111,8 @@ def     init_neighbor_state(cur_state, move):
     neighbor = init_neighbor(cur_state['size'], new_board)
     return neighbor
 
+# Returns all possible neighbors the current state could have 
+# (maps with valid places where zero could move)
 def     neighbors(cur_state):
     neighbors = []
     for move in cur_state["moves"]:
@@ -116,10 +121,6 @@ def     neighbors(cur_state):
             neighbors.append(neighbor)
     return neighbors
 
-    # neighbors method
-    # check where zero is
-    # get the map configs of where 0 could go
-    # return those map configs as a tuple
 
 def     a_star(start, user_input, greedy):
     frontier = queue.PriorityQueue()
@@ -127,18 +128,17 @@ def     a_star(start, user_input, greedy):
     came_from = {}    # dictionary containing states as keys and their origin state as value
     cost_so_far = {}  # dictionary with different states (map configs as tuples) that 
                       # have been explored as keys and their cost associated to get there as value
-    came_from[start.state['board']] = 0 # start.state['board']
+    came_from[start.state['board']] = 0 
     cost_so_far[start.state['board']] = 0
     goal = make_goal(start.state)
-    i = 0
+    loop = 0
     max_states = 0
     len_states = 0
     fn_len = len
+    time_start = time.time()
     while not frontier.empty():
-        #print("FRONTIER QUEUE\n\n", frontier.queue)
         p_item = frontier.get()
         current = p_item[1].state
-        #print("current board\n",'\n'.join(' '.join(str(cell) for cell in row) for row in np.array(current["board"])))
         if np.array_equal(np.array(current["board"]), np.array(goal)):
             break
         len_states = fn_len(list(frontier.queue))
@@ -146,26 +146,24 @@ def     a_star(start, user_input, greedy):
             max_states = len_states 
 
         for next in neighbors(current):
-            #next = i.state
             # The costs so far include the costs to get to that particular state from the source
-            new_cost = cost_so_far[current['board']] + 1 # 1 is step cost
-            #print("new_cost")
+            # 1 is the step cost
+            new_cost = cost_so_far[current['board']] + 1
             # We will add the state to the PQ if the new cost for getting to that state is less
             # than what was previously the cost for that state or if the state is not in the costs
             if next.state['board'] not in cost_so_far or new_cost < cost_so_far[next.state['board']]: 
                 cost_so_far[next.state['board']] = new_cost
-                next.priority = new_cost + user_input(next.state, goal) 
+                if greedy == 1:
+                   next.priority = user_input(next.state, goal)  
+                elif greedy == 0:
+                    next.priority = new_cost + user_input(next.state, goal) 
                 came_from[next.state['board']] = [current['board'], p_item[0]]
                 frontier.put((next.priority, next))
-                i += 1
-    print('start\n', np.array(start.state['board']))
-    print('current', np.array(current['board']))
-    print('MAX_STATES', max_states)
-    print("LOOP: ", i)
-    print('TRAJECTORYYY')
+                loop += 1
+    time_end = time.time()
+    print('TRAJECTORY\n')
     traj = 0
     trajectory = []
-    #trajectory.append([current['board'], came_from[current['board'][1]]])
     trajectory.append([current['board'], 0])
     while True:
         if np.array_equal(np.array(current['board']), np.array(start.state['board'])):
@@ -175,12 +173,14 @@ def     a_star(start, user_input, greedy):
         traj += 1
     j = 0
     for i in range(len(trajectory) - 1, 0, -1):
-        print('P_Score:',  trajectory[i][1], 'Depth: ', j)
+        print('Depth:', j, 'P_score:',  trajectory[i][1])
         j += 1
-        print(np.array(trajectory[i][0]), '\n')
+        print('\n'.join(' '.join(str(cell) for cell in row) for row in np.array(trajectory[i][0])) + '\n')
 
     print('P_Score:', trajectory[0][1], 'Depth: ', j)
-    print(np.array(trajectory[0][0]), '\n')
+    print('\n'.join(' '.join(str(cell) for cell in row) for row in np.array(trajectory[0][0])))
+    print('Solved in:', time_end - time_start)
     print('STEPS:', traj)
-
-    #print(np.array(current['board']))
+    print('Space complexity (Max states in mem):', max_states)
+    print("Time complexity: ", loop)
+   

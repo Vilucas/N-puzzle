@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/23 19:37:00 by viclucas         ###   ########.fr        #
+#    Updated: 2019/09/23 21:39:12 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,8 +55,7 @@ def     init_board(board_str):
         exit()
     return tuple(map(tuple, board)), size
 
-
-#   Init the dictionary
+#   Init the state dictionary
 def     init_state(board_arr):
     state = {}
     state['board'], state['size'] = init_board(board_arr)
@@ -99,7 +98,6 @@ if __name__ == "__main__":
     solvability(state)
     p_item = PrioritizedItem(priority=0, state=init_state(board))
     user_input = get_input()
-    #print("  ORIGINAL\n", np.array(p_item.state['board']))
     if user_input[0] == 1:
         a_star(p_item, heuristic.manhattan_dist, user_input[1])
     elif user_input[0] == 2:
