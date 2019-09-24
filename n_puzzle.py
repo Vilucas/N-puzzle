@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/23 21:39:12 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/23 21:40:16 by jcruz-y-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,7 @@ def     init_state(board_arr):
 def     get_input():
     li = []
     try:
-        print("Choose a Heuristic function :\n" + "1- Manathan\n" + "2- Hamming\n" + "3- K_double_rotor\n" + "4- Manhattan + Linear Conflict\n" + "$>", end = ' ')
+        print("Choose a Heuristic function :\n" + "1- Manhattan\n" + "2- Hamming\n" + "3- K_double_rotor\n" + "4- Manhattan + Linear Conflict\n" + "$>", end = ' ')
         li.append(int(input()))
         if li[0] > 4 or li[0] < 1:
             raise(True)
