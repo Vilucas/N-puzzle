@@ -6,7 +6,7 @@
 #    By: jcruz-y- <jcruz-y-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/16 19:01:05 by viclucas          #+#    #+#              #
-#    Updated: 2019/09/23 11:07:13 by jcruz-y-         ###   ########.fr        #
+#    Updated: 2019/09/23 19:37:00 by viclucas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ from algorithm import a_star, make_goal
 from dataclasses import dataclass, field
 from typing import Any
 from parsing import reshape_board
+from heuristic import heuristic
 
 @dataclass(order=True)
 class PrioritizedItem:
@@ -71,6 +72,14 @@ def     get_input():
         li.append(int(input()))
         if li[0] > 4 or li[0] < 1:
             raise(True)
+        print("Greedy search ? yes | no \n" + "$>", end = ' ')
+        li.append(str(input()))
+        if li[1] == "yes" or li[1] == "y":
+            li[1] = 1
+        elif li[1] == "no" or li[1] == "n":
+            li[1] = 0
+        else:
+            raise(True)
     except:
         print("Your input is not correct, Exiting...")
         sys.exit()
@@ -91,5 +100,11 @@ if __name__ == "__main__":
     p_item = PrioritizedItem(priority=0, state=init_state(board))
     user_input = get_input()
     #print("  ORIGINAL\n", np.array(p_item.state['board']))
-    #user_input = 1
-    a_star(p_item, user_input)
+    if user_input[0] == 1:
+        a_star(p_item, heuristic.manhattan_dist, user_input[1])
+    elif user_input[0] == 2:
+        a_star(p_item, heuristic.hamming_dist, user_input[1])
+    elif user_input[0] == 3:
+        a_star(p_item, heuristic.K_double_rotor, user_input[1])
+    elif user_input[0] == 4:
+        a_star(p_item, heuristic.linear_conflict, user_input[1])
